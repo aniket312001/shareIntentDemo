@@ -4,14 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:sno_biz_app/app_route/app_route.dart';
-import 'package:sno_biz_app/screens/change_password_screen.dart';
-import 'package:sno_biz_app/screens/onboarding_screen_1.dart';
-import 'package:sno_biz_app/screens/onboarding_screen_3.dart';
 
 import 'package:sno_biz_app/screens/splash_screen.dart';
-import 'package:sno_biz_app/screens/terms_condition_screen.dart';
-
-import 'package:sno_biz_app/screens/welcome_screen.dart';
 
 import 'package:sno_biz_app/services/firebase_services.dart';
 import 'package:sno_biz_app/services/loaderPercentage.dart';
@@ -66,10 +60,7 @@ void handleLink(dynamic link) {
     Uri uri = Uri.parse(link);
     String token = uri.queryParameters['token'] ?? '';
     try {
-      Future.delayed(const Duration(seconds: 1), () {
-        nextPagewithReplacement(navigatorKey.currentState?.context,
-            ChangePasswordScreen(token: token));
-      });
+      Future.delayed(const Duration(seconds: 1), () {});
     } catch (e) {
       log("e ${e.toString()}");
     }

@@ -5,21 +5,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:sno_biz_app/app_route/app_route.dart';
-import 'package:sno_biz_app/screens/AddUser/AddUserScreen.dart';
-import 'package:sno_biz_app/screens/Venders/VendersListScreen.dart';
-import 'package:sno_biz_app/screens/account_setting/profile.dart';
-import 'package:sno_biz_app/screens/account_setting/setting_screen.dart';
-import 'package:sno_biz_app/screens/assistance/Assistance_screen.dart';
-import 'package:sno_biz_app/screens/cashFlow/cashflow_screen.dart';
-import 'package:sno_biz_app/screens/chats/chat_screen.dart';
-import 'package:sno_biz_app/screens/login_screen.dart';
-import 'package:sno_biz_app/screens/notification/notifications_screen.dart';
-import 'package:sno_biz_app/screens/payment/payment_status_screen.dart';
-import 'package:sno_biz_app/screens/reminder/reminder_screen.dart';
-import 'package:sno_biz_app/screens/statistic/statistic_screen.dart';
+
 import 'package:sno_biz_app/screens/upload_document/upload_document_screen.dart';
-import 'package:sno_biz_app/screens/upload_document/uploaded_document_list_screen.dart';
-import 'package:sno_biz_app/screens/upload_document/verify_document.dart';
+
 import 'package:sno_biz_app/services/api_services.dart';
 import 'package:sno_biz_app/services/localization.dart';
 import 'package:sno_biz_app/utils/color_constants.dart';
@@ -77,29 +65,6 @@ class _DashboardScreenState extends State<DashboardScreen> {
     fetchData();
   }
 
-  logoutMethod() async {
-    CustomLoader.showProgressBar(context);
-
-    dynamic userId = await SharedPrefUtils.readPrefStr("userId");
-
-    // if (userId.toString() == 'null') {
-    //   nextPagewithReplacement(context, const LoginScreen());
-    //   return;
-    // }
-
-    dynamic obj = {"userId": userId};
-    dynamic result = await APIServices.makeApiCall("logout.php", obj);
-    log(result.toString());
-
-    Navigator.pop(context);
-    if (result['errorCode'] == '0000') {
-      await SharedPrefUtils.removePrefStr("userId");
-      nextPagewithReplacement(context, LoginScreen());
-    } else {
-      showCustomToast(context: context, message: result['errorMessage']);
-    }
-  }
-
   _launchURL(String url) async {
     await launch(url);
   }
@@ -144,9 +109,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                           fontWeight: FontWeight.bold),
                     )),
                     GestureDetector(
-                      onTap: () {
-                        nextPage(context, const NotificationScreen());
-                      },
+                      onTap: () {},
                       child: SvgPicture.asset(
                         'assets/images/notifications.svg',
                         semanticsLabel: 'My SVG Image',
@@ -302,11 +265,6 @@ class _DashboardScreenState extends State<DashboardScreen> {
                               onPressed: () {
                                 // APIServices.createFirebaseToken();
 
-                                refreshPreviousPage(
-                                    context,
-                                    UploadedDoumentListScreen(mode: "all"),
-                                    __refresh);
-
                                 // nextPage(context,
                                 //     UploadedDoumentListScreen(mode: "all"));
                               },
@@ -364,15 +322,6 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                   onTap: () {
                                     // nextPage(context,
                                     //     UploadedDoumentListScreen(mode: "unpaid"));
-
-                                    refreshPreviousPage(
-                                        context,
-                                        VerifyDocumentScreen(
-                                            data: allData,
-                                            unverifiedDocumentCount: allData[
-                                                'unverifiedDocumentCount'],
-                                            onlyVerifyOneDocument: false),
-                                        __refresh);
                                   },
                                   child: Stack(
                                     children: [
@@ -472,10 +421,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                               ),
                               Expanded(
                                 child: GestureDetector(
-                                  onTap: () {
-                                    nextPage(
-                                        context, const PaymentStatusScreen());
-                                  },
+                                  onTap: () {},
                                   child: Container(
                                     margin: EdgeInsets.only(
                                       top: MediaQuery.sizeOf(context).height *
@@ -536,9 +482,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                             children: [
                               Expanded(
                                 child: GestureDetector(
-                                  onTap: () {
-                                    nextPage(context, StatisticScreen());
-                                  },
+                                  onTap: () {},
                                   child: Container(
                                     padding: const EdgeInsets.only(
                                       top: 15.0,
@@ -655,9 +599,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                             children: [
                               Expanded(
                                 child: GestureDetector(
-                                  onTap: () {
-                                    nextPage(context, const AssistanceScreen());
-                                  },
+                                  onTap: () {},
                                   child: Container(
                                     padding: const EdgeInsets.only(
                                       top: 15.0,
@@ -772,189 +714,6 @@ class _DashboardScreenState extends State<DashboardScreen> {
               ),
             ],
           )),
-          endDrawer: SafeArea(
-            child: ClipRRect(
-              borderRadius: const BorderRadius.only(
-                topLeft: Radius.circular(20.0), // Adjust the values as needed
-                bottomLeft: Radius.circular(20.0),
-              ),
-              child: Drawer(
-                width: 230,
-                child: Container(
-                  // padding: EdgeInsets.symmetric(horizontal: 5),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      GestureDetector(
-                        onTap: () {
-                          _scaffoldKey.currentState!.closeEndDrawer();
-                        },
-                        child: Container(
-                            margin: const EdgeInsets.only(
-                                top: 15, bottom: 25, left: 15),
-                            child: const Icon(
-                              CupertinoIcons.xmark,
-                              color: AppColors.black,
-                            )),
-                      ),
-                      ListTile(
-                        minLeadingWidth: 10,
-                        leading: const Icon(
-                          Icons.perm_contact_cal_rounded,
-                          size: 24,
-                          color: AppColors.faqDescriptionColor,
-                        ),
-                        title: Text(
-                          '${localizations!.translate('Profile')}',
-                          style: TextStyle(
-                              fontSize: constraints.maxWidth * 0.045,
-                              color: AppColors.black),
-                        ),
-                        onTap: () {
-                          refreshPreviousPage(
-                              context, ProfileSettingScreen(), __refresh);
-                          // nextPage(context, const ProfileSettingScreen());
-                          _scaffoldKey.currentState!.closeEndDrawer();
-                        },
-                      ),
-                      const Padding(
-                        padding: EdgeInsets.only(left: 15.0, right: 15),
-                        child: Divider(height: 1),
-                      ),
-                      ListTile(
-                        minLeadingWidth: 10,
-                        leading: const Icon(
-                          Icons.star,
-                          size: 24,
-                          color: AppColors.faqDescriptionColor,
-                        ),
-                        title: Text(
-                          '${localizations!.translate('Vendors')}',
-                          style: TextStyle(
-                              fontSize: constraints.maxWidth * 0.045,
-                              color: AppColors.black),
-                        ),
-                        onTap: () {
-                          // Navigate to settings
-                          nextPage(context, VenderScreen());
-                          _scaffoldKey.currentState!.closeEndDrawer();
-                        },
-                      ),
-                      const Padding(
-                        padding: EdgeInsets.only(left: 15.0, right: 15),
-                        child: Divider(height: 1),
-                      ),
-                      ListTile(
-                        minLeadingWidth: 10,
-                        leading: const Icon(
-                          Icons.settings,
-                          size: 24,
-                          color: AppColors.faqDescriptionColor,
-                        ),
-                        title: Text(
-                          '${localizations!.translate('Change Language')}',
-                          style: TextStyle(
-                              fontSize: constraints.maxWidth * 0.045,
-                              color: AppColors.black),
-                        ),
-                        onTap: () {
-                          _scaffoldKey.currentState!.closeEndDrawer();
-                          nextPage(context, const SettingScreen());
-                        },
-                      ),
-                      const Padding(
-                        padding: EdgeInsets.only(left: 15.0, right: 15),
-                        child: Divider(height: 1),
-                      ),
-                      ListTile(
-                        minLeadingWidth: 10,
-                        leading: const Icon(
-                          CupertinoIcons.doc_text_fill,
-                          size: 24,
-                          color: AppColors.faqDescriptionColor,
-                        ),
-                        title: Text(
-                          '${localizations!.translate('Term & Condition')}',
-                          style: TextStyle(
-                              fontSize: constraints.maxWidth * 0.045,
-                              color: AppColors.black),
-                        ),
-                        onTap: () {
-                          // Navigate to about
-                          _launchURL("https://mijnkontinu.nl/terms.php");
-                          _scaffoldKey.currentState!.closeEndDrawer();
-                        },
-                      ),
-                      const Padding(
-                        padding: EdgeInsets.only(left: 15.0, right: 15),
-                        child: Divider(height: 1),
-                      ),
-                      ListTile(
-                        minLeadingWidth: 10,
-                        leading: const Icon(
-                          CupertinoIcons.checkmark_shield_fill,
-                          size: 24,
-                          color: AppColors.faqDescriptionColor,
-                        ),
-                        title: Text(
-                          '${localizations!.translate('Privacy policy')}',
-                          style: TextStyle(
-                              fontSize: constraints.maxWidth * 0.045,
-                              color: AppColors.black),
-                        ),
-                        onTap: () {
-                          // Navigate to about
-                          _launchURL(
-                              "https://mijnkontinu.nl/privacypolicy.php");
-                          _scaffoldKey.currentState!.closeEndDrawer();
-                        },
-                      ),
-                      const Padding(
-                        padding: EdgeInsets.only(left: 15.0, right: 15),
-                        child: Divider(height: 1),
-                      ),
-                      Spacer(),
-                      Align(
-                        alignment: Alignment.bottomCenter,
-                        child: Container(
-                          margin: const EdgeInsets.symmetric(
-                              vertical: 15, horizontal: 35),
-                          width: double.infinity,
-                          height: 45,
-                          child: ElevatedButton(
-                            onPressed: () {
-                              logoutMethod();
-                              _scaffoldKey.currentState!.closeEndDrawer();
-                            },
-                            style: ElevatedButton.styleFrom(
-                                // backgroundColor: const Color(0xFFDB3022),
-                                backgroundColor: AppColors.purpleColor,
-                                shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(20)),
-                                textStyle: TextStyle(
-                                    fontSize: constraints.maxWidth * 0.045,
-                                    color: Colors.white,
-                                    fontWeight: FontWeight.bold)),
-                            child:
-                                Text('${localizations!.translate("Log Out")}'),
-                          ),
-                        ),
-                      ),
-                      Center(
-                          child: Text(
-                        "${localizations!.translate('App version')} - 1.0.0",
-                        style: TextStyle(
-                            fontSize: constraints.maxWidth * 0.037,
-                            color: AppColors.greyColor),
-                      )),
-                      SizedBox(height: 15)
-                    ],
-                  ),
-                ),
-              ),
-            ),
-          ),
         );
       }),
     );

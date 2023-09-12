@@ -21,8 +21,7 @@ import 'package:sno_biz_app/models/request/uploadedDocumentListRequest.dart';
 import 'package:sno_biz_app/models/selectedFiles.dart';
 import 'package:sno_biz_app/screens/dashboard_screen.dart';
 import 'package:sno_biz_app/screens/success_screen.dart';
-import 'package:sno_biz_app/screens/upload_document/uploaded_document_list_screen.dart';
-import 'package:sno_biz_app/screens/upload_document/verify_document.dart';
+
 import 'package:sno_biz_app/services/api_services.dart';
 import 'package:sno_biz_app/utils/api_urls.dart';
 import 'package:sno_biz_app/utils/color_constants.dart';
@@ -785,15 +784,6 @@ class _UploadDoumentScreenState extends State<UploadDoumentScreen> {
                                           //       file: recentDocument[index]
                                           //           ['document']);
                                           // }
-
-                                          refreshPreviousPage(
-                                              context,
-                                              VerifyDocumentScreen(
-                                                data: recentDocument[index],
-                                                unverifiedDocumentCount: 0,
-                                                onlyVerifyOneDocument: true,
-                                              ),
-                                              __refresh);
                                         },
                                         child: Card(
                                           margin: EdgeInsets.zero,
@@ -847,10 +837,7 @@ class _UploadDoumentScreenState extends State<UploadDoumentScreen> {
                                     PurpleButton(
                                         text:
                                             '${localizations!.translate("View All")}',
-                                        onTap: () {
-                                          nextPage(context,
-                                              UploadedDoumentListScreen());
-                                        }),
+                                        onTap: () {}),
                                 ],
                               ),
                             ),

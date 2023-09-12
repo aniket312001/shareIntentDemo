@@ -7,10 +7,9 @@ import 'package:provider/provider.dart';
 import 'package:sno_biz_app/app_route/app_route.dart';
 import 'package:sno_biz_app/models/selectedFiles.dart';
 import 'package:sno_biz_app/screens/dashboard_screen.dart';
-import 'package:sno_biz_app/screens/login_screen.dart';
-import 'package:sno_biz_app/screens/terms_condition_screen.dart';
+
 import 'package:sno_biz_app/screens/upload_document/upload_document_screen.dart';
-import 'package:sno_biz_app/screens/welcome_screen.dart';
+
 import 'package:sno_biz_app/services/localization.dart';
 import 'package:sno_biz_app/services/select_language.dart';
 import '../models/fileTypeEnum.dart';
@@ -36,30 +35,10 @@ class _SplashScreenState extends State<SplashScreen>
   late BuildContext _initContext;
 
   Timer? _timer;
-  
 
-  // shareIntent() {
-  //    _intentDataStreamSubscription = FlutterSharingIntent.instance.getMediaStream()
-  //       .listen((List<SharedFile> value) {
-  //     setState(() {
-  //       list = value;
-  //     });
-  //     print("Shared: getMediaStream ${value.map((f) => f.value).join(",")}");
-  //   }, onError: (err) {
-  //     print("getIntentDataStream error: $err");
-  //   });
-
-  //   // For sharing images coming from outside the app while the app is closed
-  //   FlutterSharingIntent.instance.getInitialSharing().then((List<SharedFile> value) {
-  //     print("Shared: getInitialMedia ${value.map((f) => f.value).join(",")}");
-  //     setState(() {
-  //       list = value;
-  //     });
-  //   });
-  // }
   checkFile() {
     // For sharing images coming from outside the app while the app is closed
-    
+
     FlutterSharingIntent.instance
         .getInitialSharing()
         .then((List<SharedFile> value) {
@@ -123,35 +102,15 @@ class _SplashScreenState extends State<SplashScreen>
 
     animationController.repeat();
     // shareIntent();
-  log("run");
+    log("run");
     checkFile();
   }
 
   void _navigate() async {
-    dynamic userId = await SharedPrefUtils.readPrefStr('userId');
-    dynamic termCondition =
-        await SharedPrefUtils.readPrefStr('termConditionCheck');
-    dynamic skip = await SharedPrefUtils.readPrefStr('isSkiped');
-    // log(userId.toString() + " userId");
-
-    // log((SharedPrefUtils.readPrefStr('isSkiped').toString()).toString() +
-    //     " empty");
+    await SharedPrefUtils.saveStr("userId", "56");
 
     _timer = Timer(const Duration(seconds: 3), () {
-      if (userId.toString() != "null") {
-        if (termCondition.toString() == "true") {
-          nextPagewithReplacement(context, DashboardScreen());
-        } else {
-          // nextPagewithReplacement(context, WelcomeScreen());
-          nextPagewithReplacement(context, TermsAndConditionScreen());
-        }
-      } else {
-        if (skip.toString() == "true") {
-          nextPagewithReplacement(context, LoginScreen());
-        } else {
-          nextPagewithReplacement(context, WelcomeScreen());
-        }
-      }
+      nextPagewithReplacement(context, DashboardScreen());
     });
   }
 

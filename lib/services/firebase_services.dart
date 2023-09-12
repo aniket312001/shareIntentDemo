@@ -2,7 +2,6 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
 import 'package:sno_biz_app/app_route/app_route.dart';
-import 'package:sno_biz_app/screens/chats/chat_screen.dart';
 import 'dart:developer';
 
 import '../main.dart';
@@ -108,37 +107,15 @@ class FirebaseServices {
       switch (message.data["mode"]) {
         case "ticket":
           {
-            nextPage(
-                navigatorKey.currentState!.context,
-                ChatScreen(
-                  data: message.data,
-                  fromNotification: true,
-                  updateReadFlag: true,
-                ));
-
             break;
           }
 
         case "myTicket":
           {
-            nextPage(
-                navigatorKey.currentState!.context,
-                ChatScreen(
-                    data: message.data,
-                    fromNotification: true,
-                    updateReadFlag: true));
-
             break;
           }
         case "chat":
           {
-            nextPage(
-                navigatorKey.currentState!.context,
-                ChatScreen(
-                    data: message.data,
-                    fromNotification: true,
-                    updateReadFlag: true));
-
             break;
           }
       }
