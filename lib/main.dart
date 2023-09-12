@@ -31,41 +31,12 @@ void main() async {
   );
   await FirebaseServices().initNotifications();
 
-  await initUniLinks(); // dynamic linking
+
   runApp(const MyApp());
 }
 
-Future<void> initUniLinks() async {
-  try {
-    final initialLink = await getInitialLink();
-    handleLink(initialLink);
 
-    // Listen for incoming deep links
-    linkStream.listen((link) {
-      handleLink(link);
-    });
-  } on PlatformException {
-    // Handle exception
-  }
-}
 
-void handleLink(dynamic link) {
-  if (link != null) {
-    log("got a link");
-
-    // Handle the deep link based on your app's logic
-    log('Received deep link: ${link.toString()}');
-    // navigateToAboutPage(link); // Call function to navigate to About page with query parameters
-
-    Uri uri = Uri.parse(link);
-    String token = uri.queryParameters['token'] ?? '';
-    try {
-      Future.delayed(const Duration(seconds: 1), () {});
-    } catch (e) {
-      log("e ${e.toString()}");
-    }
-  }
-}
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
