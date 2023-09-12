@@ -152,10 +152,10 @@ class _SplashScreenState extends State<SplashScreen>
               // ),
               child: Container(
                   width: double.infinity,
-                  height: mq.height * 0.18,
+
                   // height: mq.height * 0.25,
                   child: Image.asset(
-                    'assets/images/sno_biz_logo.png',
+                    'assets/images/sno_biz_logo_replaced.png',
                     fit: BoxFit.cover,
                   )),
               // SizedBox(
@@ -168,10 +168,6 @@ class _SplashScreenState extends State<SplashScreen>
               //       letterSpacing: 0.2,
               //       color: AppColors.lightBlack,
               //       fontWeight: FontWeight.bold),
-              // )
-              //      ,SvgPicture.asset(
-              //   'assets/images/add_circle.svg',
-              //   semanticsLabel: 'My SVG Image',
 
               // ),
               //   ],
