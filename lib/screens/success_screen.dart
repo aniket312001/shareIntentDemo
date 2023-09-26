@@ -95,7 +95,7 @@ class _SuccessScreenState extends State<SuccessScreen> {
                             Navigator.pop(context);
                           }
                         } else {
-                          nextPagewithReplacement(context, DashboardScreen());
+                          nextPagewithReplacement(context, DashboardScreen(uploadedscreenView: '',));
                         }
                       }),
                 ],

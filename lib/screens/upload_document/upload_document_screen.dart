@@ -16,6 +16,7 @@ import 'package:intl/intl.dart';
 import 'package:path/path.dart' as path;
 import 'package:path_provider/path_provider.dart';
 import 'package:provider/provider.dart';
+import 'package:receive_sharing_intent/receive_sharing_intent.dart';
 import 'package:sno_biz_app/app_route/app_route.dart';
 import 'package:sno_biz_app/models/request/uploadedDocumentListRequest.dart';
 import 'package:sno_biz_app/models/selectedFiles.dart';
@@ -474,9 +475,10 @@ class _UploadDoumentScreenState extends State<UploadDoumentScreen> {
         builder: (context, loaderPercentageProvider, child) {
       return WillPopScope(
         onWillPop: () async {
+          // ReceiveSharingIntent.getMediaStream().listen((event) {event.clear();});
           if (widget.isFileUploaded == true) {
             log("added");
-            nextPagewithReplacement(context, DashboardScreen());
+            nextPagewithReplacement(context, DashboardScreen(uploadedscreenView: '1',));
           } else {
             log("not added");
 
@@ -504,9 +506,10 @@ class _UploadDoumentScreenState extends State<UploadDoumentScreen> {
                       children: [
                         GestureDetector(
                           onTap: () {
+                            // ReceiveSharingIntent.getMediaStream().listen((event) {event.clear();});
                             if (widget.isFileUploaded == true) {
                               nextPagewithReplacement(
-                                  context, DashboardScreen());
+                                  context, DashboardScreen(uploadedscreenView: '1',));
                             } else {
                               Navigator.pop(context);
                             }

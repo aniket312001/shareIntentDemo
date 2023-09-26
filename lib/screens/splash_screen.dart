@@ -3,6 +3,7 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:receive_sharing_intent/receive_sharing_intent.dart';
 // import 'package:receive_sharing_intent/receive_sharing_intent.dart';
 import 'package:sno_biz_app/app_route/app_route.dart';
 import 'package:sno_biz_app/models/selectedFiles.dart';
@@ -15,8 +16,8 @@ import 'package:sno_biz_app/services/select_language.dart';
 import '../models/fileTypeEnum.dart';
 import '../utils/color_constants.dart';
 import '../utils/shared_pref.dart';
-import 'package:flutter_sharing_intent/flutter_sharing_intent.dart';
-import 'package:flutter_sharing_intent/model/sharing_file.dart';
+// import 'package:flutter_sharing_intent/flutter_sharing_intent.dart';
+// import 'package:flutter_sharing_intent/model/sharing_file.dart';
 
 Size? mq;
 
@@ -37,23 +38,74 @@ class _SplashScreenState extends State<SplashScreen>
   Timer? _timer;
 
   checkFile() {
-    // For sharing images coming from outside the app while the app is closed
+    setState(() {
 
-    FlutterSharingIntent.instance
-        .getInitialSharing()
-        .then((List<SharedFile> value) {
-      print(
-          "Shared: getInitialMedia ${value.map((f) => f.value).join(",")}  2");
+    });
+    print("here1");
+    ReceiveSharingIntent.getMediaStream()
+        .listen((List<SharedMediaFile> value) {
+      fileList.clear();
+      setState(() {
+        print("Sharedlisten${value[0].path}");
+        //   // _sharedFiles = value;
+        //   // print("Shared:" + (_sharedFiles?.map((f) => f.path).join(",") ?? ""));
+      });
       for (var sharedFile in value) {
-        log(sharedFile.value.toString());
-        if (sharedFile.value.toString().endsWith('.jpg') ||
-            sharedFile.value.toString().endsWith('.jpeg') ||
-            sharedFile.value.toString().endsWith('.png') ||
-            sharedFile.value.toString().endsWith('.pdf')) {
+        print(sharedFile.path.toString());
+        if (sharedFile.path.toString().endsWith('.jpg') ||
+            sharedFile.path.toString().endsWith('.JPG') ||
+            sharedFile.path.toString().endsWith('.jpeg') ||
+            sharedFile.path.toString().endsWith('.png') ||
+            sharedFile.path.toString().endsWith('.pdf')) {
           fileList.add(SelectedFile(
-            name: sharedFile.value.toString().split('/').last,
-            path: sharedFile.value.toString(),
-            type: sharedFile.value.toString().endsWith('.pdf')
+            name: sharedFile.path.toString().split('/').last,
+            path: sharedFile.path.toString(),
+            type: sharedFile.path.toString().endsWith('.pdf')
+                ? FileType2.pdf
+                : FileType2.image,
+          ));
+        }
+      }
+      print(fileList.toString() + " added File");
+
+      if (fileList.isNotEmpty) {
+        print("not empty");
+        nextPage(context,
+            UploadDoumentScreen(isFileUploaded: true, files: fileList));
+      } else {
+        print("empty");
+        _navigate();
+      }
+    }, onError: (err) {
+      print("getIntentDataStream error: $err");
+      _navigate();
+    });
+    // For sharing images coming from outside the app while the app is closed
+    ReceiveSharingIntent.getInitialMedia().then((List<SharedMediaFile> value) {
+      setState(() {
+        // _sharedFiles = value;
+        print("Shared${value}");
+      });
+    },onError: ((error){
+      _navigate();
+    }));
+    ReceiveSharingIntent
+        .getInitialMedia()
+        .then((List<SharedMediaFile> value) {
+      fileList.clear();
+      print(value);
+      print(
+          "Shared: getInitialMedia ${value.map((f) => f.path).join(",")}  2");
+      for (var sharedFile in value) {
+        log(sharedFile.path.toString());
+        if (sharedFile.path.toString().endsWith('.jpg') ||
+            sharedFile.path.toString().endsWith('.jpeg') ||
+            sharedFile.path.toString().endsWith('.png') ||
+            sharedFile.path.toString().endsWith('.pdf')) {
+          fileList.add(SelectedFile(
+            name: sharedFile.path.toString().split('/').last,
+            path: sharedFile.path.toString(),
+            type: sharedFile.path.toString().endsWith('.pdf')
                 ? FileType2.pdf
                 : FileType2.image,
           ));
@@ -64,14 +116,16 @@ class _SplashScreenState extends State<SplashScreen>
       if (fileList.isNotEmpty) {
         log("not empty");
         nextPage(context,
-            UploadDoumentScreen(isFileUploaded: true, files: fileList));
+            UploadDoumentScreen(isFileUploaded: true, files: fileList.toSet().toList()));
       } else {
         log("empty");
-        _navigate();
+        // _navigate();
       }
     }).catchError((e) {
+      print("Error");
       _navigate();
     });
+    _navigate();
   }
 
   changeLanguage(context) async {
@@ -99,18 +153,19 @@ class _SplashScreenState extends State<SplashScreen>
       vsync: this,
       duration: Duration(seconds: 3),
     );
-
+    // checkFile();
+    _navigate();
     animationController.repeat();
     // shareIntent();
     log("run");
-    checkFile();
+
   }
 
   void _navigate() async {
     await SharedPrefUtils.saveStr("userId", "56");
 
     _timer = Timer(const Duration(seconds: 3), () {
-      nextPagewithReplacement(context, DashboardScreen());
+      nextPagewithReplacement(context, DashboardScreen(uploadedscreenView: '',));
     });
   }
 
